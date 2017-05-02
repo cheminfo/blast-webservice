@@ -6,6 +6,16 @@ const path = require('path');
 const BlastError = require('./BlastError');
 const fs = require('fs-promise');
 
+const resultKeys = {
+    sseqid: 'string',
+    bitscore: 'number',
+    evalue: 'number',
+    qstart: 'number',
+    qend: 'number',
+    sstart: 'number',
+    send: 'number'
+};
+
 module.exports = {
     blastn: async function (options, ...args) {
         if(!options.db) throw new Error('blastn: database required');
@@ -36,6 +46,17 @@ module.exports = {
             throw new BlastError(e.message, 'blast')
         }
         return dbId;
+    },
+
+    parseResult(str, format) {
+        let result = str.split('\n').filter(r => r);
+        result = result.map(r => r.split(','));
+        const parsed = new Array(result.length);
+        result.forEach((row, idx) => {
+            const parsedEl = parsed[idx] = {};
+            format.forEach((f, idx) => parsedEl[f] = extractType(row[idx], resultKeys[f]));
+        });
+        return parsed;
     }
 };
 
@@ -58,4 +79,15 @@ function CLIOptions(options) {
 
 function generateDatabaseID() {
     return Math.random().toString(16).slice(2) + '-' + Math.floor(Date.now()/1000);
+}
+
+function extractType(data, type) {
+    switch(type) {
+        case 'number':
+            return +data;
+            break;
+        default:
+            return data;
+            break;
+    }
 }

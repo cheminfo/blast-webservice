@@ -35,6 +35,7 @@ router.post('/makeblastdb', composeWithError(async function (ctx) {
 
 router.post('/blastn', composeWithError(async function (ctx) {
     const {query, database} = ctx.request.body;
+    const fmt = ['sseqid', 'bitscore', 'evalue', 'qstart', 'qend', 'sstart', 'send'];
     if (!query) {
         ctx.status = 400;
         ctx.body = 'Query is mandatory';
@@ -43,13 +44,13 @@ router.post('/blastn', composeWithError(async function (ctx) {
 
     const result = await blast.blastn({
         db: database,
-        outfmt: '"10 sseqid bitscore evalue qstart qend sstart send"'
+        outfmt: `"10 ${fmt.join(' ')}"`
     }, {
         input: query
     });
 
     ctx.status = 200;
-    ctx.body = result.toString();
+    ctx.body = blast.parseResult(result.toString(), fmt);
 }));
 
 function handleError(ctx, e) {
@@ -81,5 +82,6 @@ async function errorMiddleware(ctx, next) {
 function composeWithError(middleware) {
     return compose([errorMiddleware, middleware]);
 }
+
 
 module.exports = router;
