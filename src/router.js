@@ -5,8 +5,9 @@ const router = new Router('/');
 const fs = require('fs-extra-promise');
 const config = require('./config');
 const path = require('path');
+const compose = require('koa-compose');
 
-router.post('/makeblastdb', async function (ctx) {
+router.post('/makeblastdb', composeWithError(async function (ctx) {
     const seq = ctx.request.body.seq;
     if (!seq) {
         ctx.status = 400;
@@ -17,28 +18,22 @@ router.post('/makeblastdb', async function (ctx) {
     await fs.mkdirp(path.join(config.home, '.blast-webservice'));
     const fasta = fastaWriter(seq);
     let databaseId;
-    try {
-        databaseId = await blast.makeblastdb({
-            parse_seqids: true,
-            dbtype: 'nucl',
-            title: 'test'
-        }, {
-            input: fasta
-        });
-    } catch(e) {
-        console.error('makeblastdb failed', e);
-        ctx.status = 500;
-        ctx.body = 'Internal server error';
-    }
+    databaseId = await blast.makeblastdb({
+        parse_seqids: true,
+        dbtype: 'nucl',
+        title: 'test'
+    }, {
+        input: fasta
+    });
 
     ctx.status = 200;
     ctx.body = {
-        ok:true,
+        ok: true,
         database: databaseId
     };
-});
+}));
 
-router.post('/blastn', async function (ctx) {
+router.post('/blastn', composeWithError(async function (ctx) {
     const {query, database} = ctx.request.body;
     if (!query) {
         ctx.status = 400;
@@ -55,7 +50,36 @@ router.post('/blastn', async function (ctx) {
 
     ctx.status = 200;
     ctx.body = result.toString();
-});
+}));
 
+function handleError(ctx, e) {
+    console.error('error', e.message, e.stack);
+    switch (e.reason) {
+        case 'blast':
+            ctx.status = 500;
+            ctx.body = 'blast error';
+            break;
+        case 'not_found':
+            ctx.status = 404;
+            ctx.body = e.message;
+            break;
+        default:
+            ctx.status = 500;
+            ctx.body = 'Internal server error';
+            break;
+    }
+}
+
+async function errorMiddleware(ctx, next) {
+    try {
+        await next();
+    } catch (e) {
+        handleError(ctx, e);
+    }
+}
+
+function composeWithError(middleware) {
+    return compose([errorMiddleware, middleware]);
+}
 
 module.exports = router;

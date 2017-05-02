@@ -3,13 +3,26 @@
 const exec = require('mz/child_process').execSync;
 const config = require('./config');
 const path = require('path');
+const BlastError = require('./BlastError');
+const fs = require('fs-promise');
 
 module.exports = {
     blastn: async function (options, ...args) {
-        if(!options.db) throw new Error('makeblastdb: database required');
+        if(!options.db) throw new Error('blastn: database required');
         options.db = path.join(config.dataDir, options.db);
+        try {
+            await fs.stat(options.db + '.nsq');
+        } catch(e) {
+            throw new BlastError('Could not read database file', 'not_found');
+        }
         const cmd = `${CLICommand('blastn')} ${CLIOptions(options)}`;
-        return exec.apply(null, [cmd, ...args]);
+        let output;
+        try {
+            output = exec.apply(null, [cmd, ...args]);
+        } catch(e) {
+            throw new BlastError(e.message, 'blast');
+        }
+        return output;
     },
 
     makeblastdb: async function (options, ...args) {
@@ -17,7 +30,11 @@ module.exports = {
         const dbId = generateDatabaseID();
         options.out = path.join(config.dataDir, dbId);
         const cmd = `${CLICommand('makeblastdb')} ${CLIOptions(options)}`;
-        exec.apply(null, [cmd, ...args]);
+        try {
+            exec.apply(null, [cmd, ...args]);
+        } catch(e) {
+            throw new BlastError(e.message, 'blast')
+        }
         return dbId;
     }
 };
