@@ -8,6 +8,8 @@ const init = require('./init');
 init().then(() => {
     app.listen(3000);
 
-    app.use(bodyParser());
+    app.use(bodyParser({
+        jsonLimit: '100mb'
+    }));
     app.use(router.routes());
 });
