@@ -8,7 +8,7 @@ const FileCleaner = require('./FileCleaner');
 const config = require('./config');
 
 init().then(() => {
-    app.listen(3000);
+    app.listen(config.port);
 
     app.use(bodyParser({
         jsonLimit: '100mb'

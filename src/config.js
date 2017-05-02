@@ -19,5 +19,6 @@ if(!home) throw new Error('Could not determine home directory');
 
 argv.home = home;
 argv.dataDir = path.join(home, '.blast-webservice');
+argv.port = argv.port || 3000;
 
 module.exports = argv;
