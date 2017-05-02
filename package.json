@@ -10,10 +10,13 @@
   "license": "MIT",
   "dependencies": {
     "fs-extra-promise": "^1.0.1",
+    "fs-promise": "^2.0.2",
     "koa": "^2.2.0",
     "koa-body": "2",
     "koa-router": "^7.1.1",
     "minimist": "^1.2.0",
-    "mz": "^2.6.0"
+    "mz": "^2.6.0",
+    "parse-duration": "^0.1.1",
+    "rimraf": "^2.6.1"
   }
 }
