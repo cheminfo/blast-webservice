@@ -6,10 +6,12 @@ const bodyParser = require('koa-body');
 const init = require('./init');
 const FileCleaner = require('./FileCleaner');
 const config = require('./config');
+const cors = require('koa-cors');
 
 init().then(() => {
     app.listen(config.port);
 
+    app.use(cors());
     app.use(bodyParser({
         jsonLimit: '100mb'
     }));
