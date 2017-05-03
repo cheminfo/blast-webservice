@@ -1,7 +1,6 @@
 'use strict';
 
 const parseDuration = require('parse-duration');
-const rimraf = require('rimraf');
 const fs = require('fs-promise');
 const path = require('path');
 

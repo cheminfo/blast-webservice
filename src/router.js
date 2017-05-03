@@ -2,7 +2,7 @@ const Router = require('koa-router');
 const fastaWriter = require('./fastaWriter');
 const blast = require('./blast');
 const router = new Router('/');
-const fs = require('fs-extra-promise');
+const fs = require('fs-promise');
 const config = require('./config');
 const path = require('path');
 const compose = require('koa-compose');
@@ -38,7 +38,7 @@ router.post('/blastn', composeWithError(async function (ctx) {
     const fmt = ['sseqid', 'bitscore', 'evalue', 'qstart', 'qend', 'sstart', 'send'];
     if (!query) {
         ctx.status = 400;
-        ctx.body = 'Query is mandatory';
+        ctx.body = 'Query is required';
         return;
     }
 
