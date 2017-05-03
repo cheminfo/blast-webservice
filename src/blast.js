@@ -7,13 +7,31 @@ const BlastError = require('./BlastError');
 const fs = require('fs-promise');
 
 const resultKeys = {
-    sseqid: 'string',
-    bitscore: 'number',
-    evalue: 'number',
-    qstart: 'number',
-    qend: 'number',
-    sstart: 'number',
-    send: 'number'
+    sseqid: 'string',        // Subject sequence id
+    bitscore: 'number',      // Bit score
+    evalue: 'number',        // E-value (probability of match with random sequence)
+    qstart: 'number',        // start in query sequence
+    qend: 'number',          // end in query sequence
+    sstart: 'number',        // start in subject sequence
+    send: 'number',          // end in subject sequence
+    qseq: 'string',          // aligned part of query sequence
+    sseq: 'string',          // aligned part of subject sequence
+    score: 'number',         // raw score
+    length: 'number',        // alignment length
+    pident: 'number',        // Percentage of identical matches
+    nident: 'number',        // Number of identical matches
+    mismatch: 'number',      // Number of mismatches
+    gaps: 'number',          // Total number of gaps
+    gapopen: 'number',       // Number of gap openings
+    ppos: 'number',          // Percentage of
+    positive: 'number',      // Number of positive-scoring matches
+    frames: 'string',        // Query and subject frames separated by a '/'
+    qframe: 'string',        // Query frame
+    sframe: 'string',        // Subject frame
+    btop: 'string',          // Blast traceback operations
+    qcovs: 'number',         // Query coverage per subject
+    qcovhsp: 'number',       // Query coverage per HSP
+    qcovus: 'number',        // measure of Query Coverage that counts a position in a subject sequence for this measure only once. The second time the position is aligned to the query is not counted towards this measure
 };
 
 module.exports = {

@@ -35,7 +35,7 @@ router.post('/makeblastdb', composeWithError(async function (ctx) {
 
 router.post('/blastn', composeWithError(async function (ctx) {
     const {query, database} = ctx.request.body;
-    const fmt = ['sseqid', 'bitscore', 'evalue', 'qstart', 'qend', 'sstart', 'send'];
+    const fmt = ['sseqid', 'bitscore', 'evalue', 'qstart', 'qend', 'sstart', 'send', 'qseq', 'sseq', 'score', 'length', 'pident', 'nident', 'mismatch', 'gaps', 'gapopen', 'ppos', 'positive', 'frames', 'qframe', 'sframe', 'btop', 'qcovs', 'qcovhsp', 'qcovus'];
     if (!query) {
         ctx.status = 400;
         ctx.body = 'Query is required';
