@@ -3,6 +3,7 @@ const fs = require('fs');
 const path = require('path');
 
 const argv = minimist(process.argv.slice(2));
+argv.blastDir = argv.blastDir || process.env.BLAST_DIRECTORY;
 
 if(!argv.blastDir) {
     throw new Error('blastDir is a required argument');
