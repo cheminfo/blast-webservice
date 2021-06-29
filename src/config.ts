@@ -1,11 +1,11 @@
 import { statSync } from 'fs';
 import { resolve, join } from 'path';
 
-const blastDirConfig = process.env.BLAST_DIRECTORY;
+const blastDirConfig = process.env.BLAST_DIRECTORY_PATH;
 
 export const blastDir = (() => {
   if (!blastDirConfig) {
-    throw new Error('BLAST_DIRECTORY env variable is required');
+    throw new Error('BLAST_DIRECTORY_PATH env variable is required');
   } else {
     // check executables exist
     const blastDir = resolve(join(__dirname, '..'), blastDirConfig);

@@ -25,5 +25,5 @@ RUN npm ci
 COPY --from=builder /blast /blast
 COPY --from=builder /blast-webservice/lib ./lib
 
-ENV BLAST_DIRECTORY /blast/ncbi-blast-${BLAST_VERSION}+/bin
+ENV BLAST_DIRECTORY_PATH /blast/ncbi-blast-${BLAST_VERSION}+/bin
 CMD ["npm", "start"]
