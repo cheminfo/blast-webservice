@@ -1,0 +1,6 @@
+version: '3'
+services:
+  blast-webservice:
+    build: ./
+    env_file: .env.test
+    command: npm start
