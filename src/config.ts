@@ -19,6 +19,8 @@ if (!blastDir) {
   throw new Error('unreachable');
 }
 
+export const address = process.env.ADDRESS || '127.0.0.1';
+
 const home = process.env.HOME || (process.env.USERPROFILE as string);
 if (!home)
   throw new Error('either HOME or USERPROFILE env variables are required');

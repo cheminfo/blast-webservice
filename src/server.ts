@@ -1,7 +1,7 @@
 'use strict';
 
 import fastifyCors from 'fastify-cors';
-import { port, dataDir } from './config';
+import { port, dataDir, address } from './config';
 
 import { FileCleaner } from './FileCleaner';
 import { getApp } from './app';
@@ -19,13 +19,13 @@ async function run() {
   if (!port) {
     throw new Error('PORT env variable is required');
   }
-  app.listen(port, (err) => {
+  app.listen(port, address, (err, addr) => {
     if (err) {
       app.log.error(err);
       fileCleaner.stop();
       process.exit(1);
     } else {
-      app.log.info(`server listening on ${port}`);
+      app.log.info(`server listening on ${addr}`);
     }
   });
 }
