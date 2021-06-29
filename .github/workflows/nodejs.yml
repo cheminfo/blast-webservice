@@ -1,0 +1,28 @@
+name: CI
+
+on: push
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup env
+        run: |
+          echo 'BLAST_VERSION=<<EOF' >> $GITHUB_ENV
+          cat BLAST_VERSION >> $GITHUB_ENV
+          echo 'EOF' >> $GITHUB_ENV
+      - name: Cache blast
+        id: cache-blast
+        uses: actions/cache@v2
+        with:
+          path: /blast
+          key: ${{ $env.BLAST_VERSION }}
+
+      - name: Download Blast+
+        if: steps.cache-primes.outputs.cache-hit != 'true'
+        run: wget -qO- "ftp://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/${{ env.BLAST_VERSION }}/ncbi-blast-${{ env.BLAST_VERSION }}+-x64-linux.tar.gz" | tar xvz -C /blast
+
+      - name: Run tests
+        run: npm run test

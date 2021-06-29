@@ -7,6 +7,7 @@
     "build": "tsc",
     "test": "jest",
     "test-docker": "docker build . -f test.Dockerfile -t blast-webservice-test && docker run --rm blast-webservice-test",
+    "start-docker": "docker build . -t blast-webservice-server && docker run --rm blast-webservice-server",
     "start": "node lib/server.js"
   },
   "author": "",
