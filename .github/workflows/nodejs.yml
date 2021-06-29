@@ -18,7 +18,7 @@ jobs:
         uses: actions/cache@v2
         with:
           path: /blast
-          key: ${{ $env.BLAST_VERSION }}
+          key: ${{ env.BLAST_VERSION }}
 
       - name: Download Blast+
         if: steps.cache-primes.outputs.cache-hit != 'true'
