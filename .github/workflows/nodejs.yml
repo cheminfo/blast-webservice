@@ -31,4 +31,4 @@ jobs:
       - name: Run tests
         run: npm run test
         env:
-          BLAST_DIRECTORY_PATH: /home/runner/blast/ncbi-blast-${{ env.BLAST_VERSION }}+/bin
+          BLAST_DIRECTORY_PATH: ${HOME}/blast/ncbi-blast-${{ env.BLAST_VERSION }}+/bin
