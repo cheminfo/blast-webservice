@@ -29,6 +29,6 @@ jobs:
       - name: Install dependencies
         run: npm ci
       - name: Run tests
-        run: npm run test
-        env:
-          BLAST_DIRECTORY_PATH: /home/runner/blast/ncbi-blast-${{ env.BLAST_VERSION }}+/bin
+        run: |
+          export BLAST_DIRECTORY_PATH="${HOME}/blast/ncbi-blast-${BLAST_VERSION}+/bin"
+          npm run test
